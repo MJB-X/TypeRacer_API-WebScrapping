@@ -1,11 +1,14 @@
 const puppeteer = require("puppeteer");
+const app = require("express")();
 
+let Page = "";
 const BrowserConfig = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto("https://data.typeracer.com/pit/profile?user=mjbx", {
     timeout: 0,
   });
+  Page = page;
   return page;
 };
 const fetchData = async (page) => {
@@ -28,8 +31,16 @@ const fetchData = async (page) => {
   return data;
 };
 
-BrowserConfig().then((page) => {
-  fetchData(page).then((data) => {
-    console.log(data);
+app.get("/", async (req, res) => {
+  await fetchData(Page).then((data) => {
+    res.send(data);
+  });
+});
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Example app listening on port ${process.env.PORT || 3000}!`);
+  BrowserConfig().then((page) => {
+    fetchData(page).then((data) => {
+      console.log(data);
+    });
   });
 });
