@@ -4,11 +4,17 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
+let URL = "https://data.typeracer.com/pit/profile?user=mjbx";
 let Page = "";
+app.get("/", async (req, res) => {
+  await fetchData(Page).then((data) => {
+    res.send(data);
+  });
+});
 const BrowserConfig = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto("https://data.typeracer.com/pit/profile?user=mjbx", {
+  await page.goto(URL, {
     timeout: 0,
   });
   Page = page;
@@ -34,16 +40,11 @@ const fetchData = async (page) => {
   return data;
 };
 
-app.get("/", async (req, res) => {
-  await fetchData(Page).then((data) => {
-    res.send(data);
-  });
-});
 app.listen(process.env.PORT || 3000, () => {
-  console.log(`Example app listening on port : ${process.env.PORT || 3000}!`);
+  //   console.log(`Example app listening on port : ${process.env.PORT || 3000}!`);
   BrowserConfig().then((page) => {
     fetchData(page).then((data) => {
-      console.log(data);
+      //   console.log(data);
     });
   });
 });
