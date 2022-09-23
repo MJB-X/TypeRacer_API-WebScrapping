@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 const app = require("express")();
 
+const hostname = "0.0.0.0";
 let Page = "";
 const BrowserConfig = async () => {
   const browser = await puppeteer.launch();
@@ -36,8 +37,10 @@ app.get("/", async (req, res) => {
     res.send(data);
   });
 });
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Example app listening on port ${process.env.PORT || 3000}!`);
+app.listen(process.env.PORT || 3000, hostname, () => {
+  console.log(
+    `Example app listening on port ${hostname} : ${process.env.PORT || 3000}!`
+  );
   BrowserConfig().then((page) => {
     fetchData(page).then((data) => {
       console.log(data);
