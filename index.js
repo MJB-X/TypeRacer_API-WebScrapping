@@ -7,9 +7,10 @@ app.use(cors());
 let URL = "https://data.typeracer.com/pit/profile?user=mjbx";
 let Page = "";
 app.get("/", async (req, res) => {
-  await fetchData(Page).then((data) => {
-    res.send(data);
-  });
+  res.send("hello its working");
+  //   await fetchData(Page).then((data) => {
+  //     res.send(data);
+  //   });
 });
 const BrowserConfig = async () => {
   const browser = await puppeteer.launch();
